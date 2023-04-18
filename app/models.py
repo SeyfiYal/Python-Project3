@@ -50,3 +50,6 @@ lv = City(name='Las Vegas', state = 'NV', country='USA')
 session.add_all([nyc, la, sf, chs, lv])
 # session.query(City).filter(City.name.in_(['New York', 'Los Angeles', 'San Francisco', 'Charleston', 'Las Vegas'])).delete(synchronize_session=False)
 session.commit()
+
+
+# note that
