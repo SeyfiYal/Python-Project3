@@ -1,22 +1,16 @@
-
-# from operator import truediv
-from cgitb import reset
-import time # im gonna need this for (time.sleep -> 0.05ms) for letters to slide slowly
-import shutil
-import os
-from tkinter.ttk import Style # makes you interact with the os need for to clear the terminal
-from nltk.chat.util import Chat, reflections #It provides pre-programmed responses to user inputs based on regular expression defined in the intents() method.
-
+import time # we're gonna need this for letters to slide slowly (time.sleep -> 0.05ms) 
+import shutil # get the size of the terminal
+import os # need for interacting with os such as clearing terminal screen "os.screen(clear)"
+from nltk.chat.util import Chat, reflections # It provides pre-programmed responses to user inputs based on regular expression defined in the intents() method.
 
 class ChatBot:
     def __init__(self):
         self.chatbot = Chat(self.intents())
-        self.history = []
 
     def respond(self, user_input):
         response = self.chatbot.respond(user_input)
-        self.history.append((user_input, response))
         return response
+
 
     def intents(self):
         return [
@@ -52,13 +46,11 @@ class ChatBot:
         (r'.*', ['I\'m not sure what you mean, can you please rephrase that?', 'Sorry, I don\'t understand what you\'re asking!', 'I\'m not sure I know the answer to that!']),
     ]
 
-
 chatbot = ChatBot()
 
-##Diplay the response more clearly and readible
+## Display the response more clearly and readable
 def format_response(response):
     return response.strip()
-
 
 ### Clear terminal and show front page ###
 os.system('clear') # clear the terminal when run the program
@@ -71,14 +63,14 @@ print("\n".join([line.upper().center(shutil.get_terminal_size().columns) for lin
                  ]))
 
 #Chat loop
-
 while True:
     user_input = input("Human: ")
     exit = user_input.lower() == 'quit'
+    
     if  exit:
         exit_message = "\t\t\t\t\t\t\tTHANKS FOR BEING HERE "
         for letter in exit_message:
-            print(letter, end = '', flush=True)
+            print(letter, end='', flush=True)
             time.sleep(0.05)
         print()
         break
@@ -86,5 +78,7 @@ while True:
     response ="\nOver-Lord: " + chatbot.respond(user_input) + "\n"
     for letter in response:
         print(letter, end='', flush=True)
-        time.sleep(0.01) # adjust the delay between letters 
+        time.sleep(0.01)
     print()
+
+
