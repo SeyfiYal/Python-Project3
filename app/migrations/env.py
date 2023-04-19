@@ -5,8 +5,8 @@ from sqlalchemy import pool
 
 from alembic import context
 
-engine = create_engine("your_database_uri")
-if not engine.dialect.has_table(engine, "city"):
+engine = create_engine("sqlite:///test.db")
+if not engine.dialect.has_table(engine, "cities"):
     raise Exception("City table does not exist in the database.")
 
 # this is the Alembic Config object, which provides
