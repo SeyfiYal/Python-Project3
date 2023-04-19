@@ -1,55 +1,40 @@
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+
 
 engine = create_engine('sqlite:///test.db')
 
 Base = declarative_base()
 
 class City(Base):
-    __tablename__ = 'city'
+    __tablename__ = 'cities'
     id = Column(Integer, primary_key=True)
     name = Column(String)
     state = Column(String)
     country = Column(String)
+    hotels = relationship('Hotel', backref='city')
+    restaurants = relationship('Restaurant', backref='city')
+    attractions = relationship('Attraction', backref='city')
 
 
 class Hotel(Base):
-    __tablename__ = 'hotel'
+    __tablename__ = 'hotels'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    city_id = Column(Integer)
+    city_id = Column(Integer, ForeignKey('cities.id'))
 
 
 class Restaurant(Base):
-    __tablename__ ='restaurant'
+    __tablename__ ='restaurants'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    city_id = Column(Integer)
+    city_id = Column(Integer, ForeignKey('cities.id'))
 
 
 class Attraction(Base):
-    __tablename__ = 'attraction'
+    __tablename__ = 'attractions'
     id = Column(Integer, primary_key=True)
     name = Column(String)
-    city_id = Column(Integer)
+    city_id = Column(Integer, ForeignKey('cities.id'))
 
-
-from sqlalchemy.orm import sessionmaker
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-if __name__ == '__main__':
-    Base.metadata.create_all(bind=engine)
-
-nyc = City(name='New York', state='NY', country='USA')
-la = City(name='Los Angeles', state='CA', country='USA')
-sf= City(name='San Francisco', state='CA', country='USA')
-chs = City(name='Charleston', state = 'SC', country='USA')
-lv = City(name='Las Vegas', state = 'NV', country='USA')
-session.add_all([nyc, la, sf, chs, lv])
-# session.query(City).filter(City.name.in_(['New York', 'Los Angeles', 'San Francisco', 'Charleston', 'Las Vegas'])).delete(synchronize_session=False)
-session.commit()
-
-
-# note that
